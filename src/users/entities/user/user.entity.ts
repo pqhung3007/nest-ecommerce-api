@@ -1,5 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
+
+export enum UserRole {
+  ADMIN = 'admin',
+  USER = 'user',
+}
 
 @Entity()
 export class User extends BaseEntity {
@@ -9,6 +14,6 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Column({ default: 'customer' })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: 'customer' | 'admin';
 }
