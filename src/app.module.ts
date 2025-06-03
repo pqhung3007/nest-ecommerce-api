@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -14,8 +16,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         url: config.get<string>('DATABASE_URL'),
         synchronize: true, // Set to false in production
         autoLoadEntities: true, // Automatically load entities
-        logging: process.env.NODE_ENV === 'development', // Enable logging in development
       }),
+    }),
+    AuthModule,
+    UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
     }),
   ],
   controllers: [AppController],
