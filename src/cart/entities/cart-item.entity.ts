@@ -6,7 +6,7 @@ import { Product } from '../../products/entities/product.entity';
 
 @Entity()
 export class CartItem extends BaseEntity {
-  @ManyToOne(() => Cart, (cart) => cart.items, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Cart, (cart) => cart.cartItems, { onDelete: 'CASCADE' })
   cart: Cart;
 
   @ManyToOne(() => Product, { eager: true })

@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../../common/entities/base.entity';
 import { Review } from '../../../reviews/entities/review.entity';
+import { Order } from '../../../orders/entities/order.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -20,4 +21,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }

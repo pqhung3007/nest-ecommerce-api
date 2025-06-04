@@ -85,4 +85,11 @@ export class CartService {
   async getCart(userId: string) {
     return this.getOrCreateCart(userId);
   }
+
+  async getCartWithRelations(userId: string) {
+    return this.cartRepo.findOne({
+      where: { user: { id: userId } },
+      relations: ['cartItems', 'cartItems.product'],
+    });
+  }
 }
