@@ -6,24 +6,40 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { ReviewsService } from './reviews.service';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { imageUploadConfig } from '../common/configs/multer.config';
 
-@UseGuards(JwtAuthGuard)
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@CurrentUser('id') userId: string, @Body() dto: CreateReviewDto) {
-    return this.reviewsService.create(userId, dto);
+  @UseInterceptors(FileInterceptor('image', imageUploadConfig))
+  async create(
+    @CurrentUser('id') userId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() dto: CreateReviewDto,
+  ) {
+    const imageUrl = file ? `/uploads/reviews/${file.filename}` : undefined;
+    return this.reviewsService.create(userId, {
+      ...dto,
+      imageUrl,
+    });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -33,6 +49,7 @@ export class ReviewsController {
     return this.reviewsService.update(id, userId, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.reviewsService.remove(id, userId);
