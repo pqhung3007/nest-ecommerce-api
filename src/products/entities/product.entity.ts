@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
+import { Category } from '../../categories/entities/category.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -27,6 +28,7 @@ export class Product extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column()
-  category: string;
+  @ManyToOne(() => Category, (category) => category.products, { eager: true })
+  @JoinColumn()
+  category: Category;
 }
