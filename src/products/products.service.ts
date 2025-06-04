@@ -32,7 +32,6 @@ export class ProductsService {
 
     const product = this.productRepo.create({
       ...createDto,
-      createdAt: new Date(),
     });
 
     return this.productRepo.save(product);
@@ -52,7 +51,6 @@ export class ProductsService {
     const updatedProduct = {
       ...product,
       ...updateDto,
-      updatedAt: new Date(),
     };
 
     return this.productRepo.save(updatedProduct);

@@ -28,7 +28,6 @@ export class CategoriesService {
   async create(dto: CreateCategoryDto) {
     const category = this.categoryRepository.create({
       ...dto,
-      createdAt: new Date(),
     });
     return this.categoryRepository.save(category);
   }
@@ -41,7 +40,6 @@ export class CategoriesService {
     const updatedCategory = {
       ...category,
       ...dto,
-      updatedAt: new Date(),
     };
 
     return this.categoryRepository.save(updatedCategory);
