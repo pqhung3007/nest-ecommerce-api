@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Category } from '../../categories/entities/category.entity';
+import { Review } from '../../reviews/entities/review.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -31,4 +32,13 @@ export class Product extends BaseEntity {
   @ManyToOne(() => Category, (category) => category.products, { eager: true })
   @JoinColumn()
   category: Category;
+
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
+
+  @Column('decimal', { default: 0, precision: 2, scale: 1 })
+  averageRating: number;
+
+  @Column('int', { default: 0 })
+  reviewCount: number;
 }
